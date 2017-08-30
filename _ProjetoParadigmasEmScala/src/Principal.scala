@@ -8,6 +8,6 @@
 
 object Principal {
   def main (agrs: Array[String]){
-    
+    print ("hello world")
   }
 }
