@@ -1,52 +1,56 @@
 
+import scala.util.matching.Regex
 
-class Carta (var numero:Char, var nipe:Char, var peso:Int){  
-  
-  def getNumero() : Char = numero
-  
-  def setNumero (numero: Char): Unit = {
-    this.numero = numero
+class Carta(carta: String) {
+  require(isValid(carta), "Carta invalida")
+
+  def numero: String = {
+    carta.substring(0,1)
   }
-  
-  def getNipe() : Char = nipe
-  
-  def setNipe(nipe: Char): Unit = {
-    this.nipe = nipe
+
+  def naipe: String = {
+    carta.substring(1,2)
   }
-  
-  def getPeso() : Int = peso
-  
-  def setPeso(peso: Int): Unit = {
-    this.peso = peso
+
+  def peso: Int = {
+    Carta.peso(numero)
   }
-    
-  def atribuirPeso (carta: Carta): Unit = {
-    if (carta.getNumero() == '2') {
-			this.setPeso(1);
-		} else if (carta.getNumero() == '3') {
-			this.setPeso(2);
-		} else if (carta.getNumero() == '4') {
-			this.setPeso(3);
-		} else if (carta.getNumero() == '5') {
-			this.setPeso(4);
-		} else if (carta.getNumero() == '6') {
-			this.setPeso(5);
-		} else if (carta.getNumero() == '7') {
-			this.setPeso(6);
-		} else if (carta.getNumero() == '8') {
-			this.setPeso(7);
-		} else if (carta.getNumero() == '9') {
-			this.setPeso(8);
-		} else if (carta.getNumero() == 'T') {
-			this.setPeso(9);
-		} else if (carta.getNumero() == 'J') {
-			this.setPeso(10);
-		} else if (carta.getNumero() == 'Q') {
-			this.setPeso(11);
-		} else if (carta.getNumero() == 'K') {
-			this.setPeso(12);
-		} else if (carta.getNumero() == 'A') {
-			this.setPeso(13);
-		}
+
+  override def toString: String = {
+    carta
   }
+
+  private def isValid(card: String): Boolean = {
+    new Regex("[2-9KTQJA]{1}[CDSH]{1}").findAllIn(card).length > 0
+  }
+}
+
+object Carta {
+  def apply(cs: String): Carta = new Carta(cs)
+
+  val naipe: List[String] = 
+    List("C", "H", "D", "S")
+
+  val numero: List[String] = 
+    (2 to 9).map(_.toString).toList ::: List("T", "J", "Q", "K", "A")
+
+  def peso(key: String): Int = {
+    pesos.find(v => v._1 == key).get._2
+  }
+
+  private val pesos: List[(String, Int)] = List(
+    ("2", 2),
+    ("3", 3),
+    ("4", 4),
+    ("5", 5),
+    ("6", 6),
+    ("7", 7),
+    ("8", 8),
+    ("9", 9),
+    ("T", 10),
+    ("J", 11),
+    ("Q", 12),
+    ("K", 13),
+    ("A", 14)
+  )
 }
